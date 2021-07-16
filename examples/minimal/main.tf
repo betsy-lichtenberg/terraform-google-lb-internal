@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-provider google {
-  version = "~> 3.14.0"
+provider "google" {
+  version = "~> 3.62.0"
 }
 
 provider "random" {
@@ -46,6 +46,7 @@ locals {
     request             = ""
     request_path        = "/"
     host                = "1.2.3.4"
+    enable_log          = false
   }
 }
 
@@ -63,8 +64,10 @@ resource "google_compute_subnetwork" "test" {
   ip_cidr_range = "10.2.0.0/16"
 }
 
+# [START cloudloadbalancing_int_tcp_udp_gce]
 module "test_ilb" {
-  source       = "../../"
+  source       = "GoogleCloudPlatform/lb-internal/google"
+  version      = "~> 4.0"
   project      = var.project_id
   network      = google_compute_network.test.name
   subnetwork   = google_compute_subnetwork.test.name
@@ -76,3 +79,4 @@ module "test_ilb" {
   backends     = []
   health_check = local.health_check
 }
+# [END cloudloadbalancing_int_tcp_udp_gce]
